@@ -54,6 +54,7 @@ class Game:
 
 	# function to perform generalized row check
 	def check_general_rows(self, rows, player):
+		current_player = " "
 		for row in rows:
 				for index, place in enumerate(row):
 					check_space = []
@@ -61,9 +62,9 @@ class Game:
 					begin = 0
 					while len(check_space) < self.combo:
 						# if self.has_right(index + begin):
-						if index + begin + 1 <= len(row) - 1:
-							if row[index + begin + 1] == player:
-								check_space.append(row[index + begin + 1])
+						if index + begin <= len(row) - 1:
+							if row[index + begin] == player:
+								check_space.append(row[index + begin])
 								begin = begin + 1
 							else:
 								break
@@ -71,9 +72,10 @@ class Game:
 							break
 
 					if len(check_space) == self.combo:
-						self.winner = player
+						current_player = player
 						print(f'{player} win!')
-						return
+						return current_player
+		return current_player
 
 
 	# function to see if we have a winner
@@ -82,16 +84,29 @@ class Game:
 		for player in ["B", "W"]:
 
 			# check horizontal
-			self.check_general_rows(self.shaped, player)
+			current_player1 = self.check_general_rows(self.shaped, player)
+			if current_player1 == 'B':
+                return "B"
+            elif current_player1 == 'W':
+                return "W"
 
 			# check vertical
 			rotated = zip(*self.shaped[::-1])
-			self.check_general_rows(rotated, player)
+			current_player2 = self.check_general_rows(rotated, player)
+            if current_player2 == 'B':
+                return "B"
+            elif current_player2 == 'W':
+                return "W"
 
 			# check diagonal
 			diags = [self.shaped[::-1,:].diagonal(i) for i in range(-self.shaped.shape[0]+1,self.shaped.shape[1])]
 			diags.extend(self.shaped.diagonal(i) for i in range(self.shaped.shape[1]-1,-self.shaped.shape[0],-1))
-			self.check_general_rows(diags, player)
+			 current_player3 = self.check_general_rows(diags, player)
+
+            if current_player3 == 'B':
+                return "B"
+            elif current_player3 == 'W':
+                return "W"
 
 		if self.winner is '':
 			print('winner unknown yet')
