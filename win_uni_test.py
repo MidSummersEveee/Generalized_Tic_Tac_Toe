@@ -1,4 +1,4 @@
-# @author Zhihan Jiang
+# @Author Zhihan Jiang
 import math
 import numpy as np
 
